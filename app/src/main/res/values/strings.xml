@@ -6,4 +6,7 @@
     <string name="stop_update">STOP UPDATE</string>
     <string name="random">Random: 100</string>
     <string name="generate">Generate</string>
+    <string name="content_title">Content title</string>
+    <string name="content_text">Content text</string>
+    <string name="subtext">Sub text</string>
 </resources>

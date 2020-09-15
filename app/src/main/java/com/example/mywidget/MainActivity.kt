@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         btn_start.setOnClickListener(this)
         btn_stop.setOnClickListener(this)
+        button_show_notification.setOnClickListener(this)
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         when(view?.id){
             R.id.btn_start -> startJob()
             R.id.btn_stop -> stopJob()
+            R.id.button_show_notification -> startService(Intent(this, NotificationService::class.java))
         }
     }
 
@@ -75,6 +77,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentIntent(pendingIntent)
             .setSmallIcon(R.drawable.ic_assistant)
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_assistant))
             .setContentTitle(resources.getString(R.string.content_title))

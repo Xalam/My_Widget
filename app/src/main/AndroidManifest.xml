@@ -9,6 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name=".NotificationBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false"/>
+
+        <service
+            android:name=".NotificationService"
+            android:exported="false" />
+
+        <activity android:name=".ReplyActivity" />
+
         <receiver android:name=".RandomNumberWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -26,10 +37,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="com.example.mywidget.MyWidgetService"
+
+        <service
+            android:name=".MyWidgetService"
             android:enabled="true"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        
     </application>
 
 </manifest>

@@ -17,4 +17,8 @@
     <string name="notif_title_sent">Reply Sent</string>
     <string name="notif_content_sent">Message has been sent</string>
     <string name="hint_reply">Masukkan reply</string>
+    <string name="stack_notif">Stack Notif</string>
+    <string name="hintSender">Masukkan nama sender</string>
+    <string name="hintMessage">Masukkan message</string>
+    <string name="sendNotif">Kirim</string>
 </resources>

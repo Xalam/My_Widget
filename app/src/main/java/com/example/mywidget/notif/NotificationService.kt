@@ -1,4 +1,4 @@
-package com.example.mywidget
+package com.example.mywidget.notif
 
 import android.app.*
 import android.content.Intent
@@ -6,6 +6,8 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.example.mywidget.R
+import com.example.mywidget.ReplyActivity
 
 class NotificationService : IntentService("NotificationService") {
     companion object {
@@ -45,7 +47,9 @@ class NotificationService : IntentService("NotificationService") {
             .setAllowGeneratedReplies(true)
             .build()
 
-        val mBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
+        val mBuilder = NotificationCompat.Builder(this,
+            CHANNEL_ID
+        )
             .setSmallIcon(R.drawable.ic_assistant)
             .setContentTitle(getString(R.string.notif_title))
             .setContentText(getString(R.string.notif_content))
@@ -56,7 +60,8 @@ class NotificationService : IntentService("NotificationService") {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             /* Create or update. */
-            val channel = NotificationChannel(CHANNEL_ID,
+            val channel = NotificationChannel(
+                CHANNEL_ID,
                 CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_DEFAULT)
 
@@ -74,7 +79,12 @@ class NotificationService : IntentService("NotificationService") {
             intent = NotificationBroadcastReceiver.getReplyMessageIntent(this, mNotificationId, mMessageId)
             PendingIntent.getBroadcast(applicationContext, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         } else {
-            intent = ReplyActivity.getReplyMessageIntent(this, mNotificationId, mMessageId)
+            intent =
+                ReplyActivity.getReplyMessageIntent(
+                    this,
+                    mNotificationId,
+                    mMessageId
+                )
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             PendingIntent.getActivity(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }

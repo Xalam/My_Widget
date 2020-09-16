@@ -10,12 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver
-            android:name=".NotificationBroadcastReceiver"
+            android:name=".notif.NotificationBroadcastReceiver"
             android:enabled="true"
             android:exported="false"/>
 
         <service
-            android:name=".NotificationService"
+            android:name=".notif.NotificationService"
             android:exported="false" />
 
         <activity android:name=".ReplyActivity" />
@@ -43,7 +43,7 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        
+
     </application>
 
 </manifest>

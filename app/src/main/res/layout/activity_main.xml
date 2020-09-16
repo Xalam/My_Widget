@@ -50,4 +50,42 @@
             android:textColor="#FFF"
             android:text="@string/text_show_notif"/>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/stack_notif"
+            android:textColor="@color/colorPrimary"/>
+        <EditText
+            android:id="@+id/edtSender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:ems="20"
+            android:hint="@string/hintSender"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/edtMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:ems="20"
+            android:hint="@string/hintMessage"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:padding="16dp"
+            android:text="@string/sendNotif"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 </LinearLayout>

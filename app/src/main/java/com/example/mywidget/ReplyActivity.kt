@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.example.mywidget.MainActivity.Companion.CHANNEL_ID
 import com.example.mywidget.MainActivity.Companion.CHANNEL_NAME
-import com.example.mywidget.NotificationService.Companion.REPLY_ACTION
+import com.example.mywidget.notif.NotificationService.Companion.REPLY_ACTION
 import kotlinx.android.synthetic.main.activity_reply.*
 
 class ReplyActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.example.mywidget
+package com.example.mywidget.notif
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,7 +11,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.example.mywidget.MainActivity.Companion.CHANNEL_ID
 import com.example.mywidget.MainActivity.Companion.CHANNEL_NAME
-import com.example.mywidget.NotificationService.Companion.REPLY_ACTION
+import com.example.mywidget.notif.NotificationService.Companion.REPLY_ACTION
+import com.example.mywidget.R
 
 class NotificationBroadcastReceiver : BroadcastReceiver() {
 
@@ -31,7 +32,10 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.KITKAT_WATCH)
     override fun onReceive(context: Context, intent: Intent) {
         if (REPLY_ACTION == intent.action) {
-            val message = NotificationService.getReplyMessage(intent)
+            val message =
+                NotificationService.getReplyMessage(
+                    intent
+                )
             val messageId = intent.getIntExtra(KEY_MESSAGE_ID, 0)
 
             Toast.makeText(context, "Message ID: $messageId\nMessage: $message",

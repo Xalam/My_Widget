@@ -14,12 +14,17 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.example.mywidget.notif.NotificationService
+import com.example.mywidget.stack_notif.NotificationItem
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
+    private var idNotif = 0
+    private val stackNotif = ArrayList<NotificationItem>()
 
     companion object {
         private const val JOB_ID = 100
@@ -27,6 +32,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val NOTIFICATION_ID = 1
         var CHANNEL_ID = "channel_01"
         var CHANNEL_NAME: CharSequence = "xalam channel"
+        private const val CHANNEL_NAME_STACK = "my channel"
+        private const val GROUP_KEY_EMAILS = "group_key_emails"
+        private const val NOTIFICATION_REQUEST_CODE = 200
+        private const val MAX_NOTIFICATION = 2
+
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +45,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btn_start.setOnClickListener(this)
         btn_stop.setOnClickListener(this)
         button_show_notification.setOnClickListener(this)
+        btnSend.setOnClickListener(this)
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -43,6 +54,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btn_start -> startJob()
             R.id.btn_stop -> stopJob()
             R.id.button_show_notification -> startService(Intent(this, NotificationService::class.java))
+            R.id.btnSend -> stackNotif()
         }
     }
 
@@ -95,5 +107,82 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val notification = builder.build()
 
         notificationManager.notify(NOTIFICATION_ID, notification)
+    }
+
+    fun stackNotif(){
+        val sender = edtSender.text.toString()
+        val message = edtMessage.text.toString()
+        if (sender.isEmpty() || message.isEmpty()){
+            Toast.makeText(this@MainActivity, "Data Harus Diisi", Toast.LENGTH_SHORT).show()
+        } else {
+            stackNotif.add(NotificationItem(idNotif, sender, message))
+            sendNotifStack()
+            idNotif++
+            edtSender.setText("")
+            edtMessage.setText("")
+
+            val methodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            methodManager.hideSoftInputFromWindow(edtMessage.windowToken, 0)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        stackNotif.clear()
+        idNotif = 0
+    }
+
+    private fun sendNotifStack(){
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_assistant)
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        val pendingIntent = PendingIntent.getActivity(this, NOTIFICATION_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val builder: NotificationCompat.Builder
+
+        val CHANNEL_ID = "channel_01"
+        if(idNotif < MAX_NOTIFICATION){
+            builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("New Email From " + stackNotif[idNotif].sender)
+                .setContentText(stackNotif[idNotif].message)
+                .setSmallIcon(R.drawable.ic_assistant)
+                .setLargeIcon(largeIcon)
+                .setGroup(GROUP_KEY_EMAILS)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+        } else {
+            val inboxStyle = NotificationCompat.InboxStyle()
+                .addLine("New Email from " + stackNotif[idNotif].sender)
+                .addLine("New Email from " + stackNotif[idNotif - 1].sender)
+                .setBigContentTitle("$idNotif new emails")
+                .setSummaryText("mail@xalam")
+            builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("$idNotif new emails")
+                .setContentText("mail@dicoding.com")
+                .setSmallIcon(R.drawable.ic_mail)
+                .setGroup(GROUP_KEY_EMAILS)
+                .setGroupSummary(true)
+                .setContentIntent(pendingIntent)
+                .setStyle(inboxStyle)
+                .setAutoCancel(true)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            /* Create or update. */
+            val channel = NotificationChannel(CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT)
+
+            builder.setChannelId(CHANNEL_ID)
+
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notification = builder.build()
+
+        notificationManager.notify(idNotif, notification)
+
+
     }
 }
